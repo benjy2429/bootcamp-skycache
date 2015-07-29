@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Geocache</string>
+    <string name="app_name">Sky Geocache</string>
 
     <string name="scan">Scan</string>
-    <string name="title_activity_pick">Geocache</string>
+    <string name="title_activity_pick">Sky Geocache</string>
     <string name="activity_logout">Logout</string>
 
     <string name="title_section1">Pick</string>

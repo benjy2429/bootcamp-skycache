@@ -14,13 +14,13 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.QrActivity"
-            android:parentActivityName=".activities.TabbedActivity" >
+            android:parentActivityName=".activities.MapActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.TabbedActivity" />
+                android:value=".activities.MapActivity" />
         </activity>
         <activity
-            android:name=".activities.TabbedActivity"
+            android:name=".activities.MapActivity"
             android:label="@string/title_activity_pick" >
         </activity>
         <activity
