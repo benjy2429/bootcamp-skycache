@@ -66,7 +66,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (scanContent != null) {
 
                 if (scanContent.startsWith("skycash")) {
-                    Toast.makeText(getApplicationContext(), scanContent, Toast.LENGTH_SHORT).show();
+                    Intent rewardIntent = new Intent(this, RewardActivity.class);
+                    startActivity(rewardIntent);
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Invalid barcode", Toast.LENGTH_SHORT).show();
                 }

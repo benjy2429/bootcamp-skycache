@@ -7,4 +7,7 @@
 
     <string name="title_section1">Pick</string>
     <string name="title_section2">Pack</string>
+    <string name="title_activity_reward">Sky Geocache</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
