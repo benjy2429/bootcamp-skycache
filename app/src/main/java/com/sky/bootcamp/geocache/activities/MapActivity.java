@@ -1,6 +1,7 @@
 package com.sky.bootcamp.geocache.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,23 +11,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.sky.bootcamp.geocache.controllers.Tabbed;
 import com.sky.bootcamp.geocache.R;
 
 /**
  * Created by bca23 on 25/07/15.
  */
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     // Declaring Your View and Variables
     Toolbar toolbar;
+    MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tabbed);
+        setContentView(R.layout.activity_map);
+
+        mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
 
         // Creating The Toolbar and setting it as the Toolbar for the activity
@@ -52,18 +62,25 @@ public class MapActivity extends AppCompatActivity {
         if (scanningResult != null) {
 
             String scanContent = scanningResult.getContents();
-            Tabbed.getOrderLineByBarcode(scanContent);
+
+            if (scanContent != null) {
+
+                if (scanContent.startsWith("skycash")) {
+                    Toast.makeText(getApplicationContext(), scanContent, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid barcode", Toast.LENGTH_SHORT).show();
+                }
+            }
 
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_pick, menu);
+        getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
     }
 
@@ -83,5 +100,27 @@ public class MapActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Disable the back button
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        map.setMyLocationEnabled(true);
+
+        addGeocache(53.795459, -1.552803, map);
+        addGeocache(53.796351, -1.545103, map);
+        addGeocache(53.800356, -1.549609, map);
+        addGeocache(53.795566, -1.563084, map);
+        addGeocache(53.790242, -1.552398, map);
+
+    }
+
+    private void addGeocache(double lat, double lon, GoogleMap map) {
+        CircleOptions circleOptions = new CircleOptions()
+                .center(new LatLng(lat, lon))
+                .fillColor(Color.argb(128, 10, 133, 200))
+                .strokeWidth(0)
+                .radius(50);
+
+        map.addCircle(circleOptions);
     }
 }
