@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.sky.bootcamp.geocache.R;
+import com.sky.bootcamp.geocache.models.User;
 
 /**
  * Created by bca23 on 25/07/15.
@@ -28,11 +29,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Declaring Your View and Variables
     Toolbar toolbar;
     MapFragment mapFragment;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        currentUser = (User) getIntent().getSerializableExtra("currentUser");
 
         mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -67,6 +71,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 if (scanContent.startsWith("skycash")) {
                     Intent rewardIntent = new Intent(this, RewardActivity.class);
+                    rewardIntent.putExtra("currentUser", currentUser);
                     startActivity(rewardIntent);
 
                 } else {

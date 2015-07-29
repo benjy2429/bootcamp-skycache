@@ -16,7 +16,7 @@ public class DatabaseAccessLayer {
 
     private static Connection conn = Database.GetConnection();
 
-    public static User getUserFromEmail(String email) throws SQLException {
+    public static User getUserFromEmail(String email) throws SQLException, NullPointerException {
         User user = null;
 
         Connection con = Database.GetConnection();
@@ -27,12 +27,19 @@ public class DatabaseAccessLayer {
 
         if (rs.next()) {
             String password = rs.getString("password");
-            Timestamp lastLogin = rs.getTimestamp("last_login");
-            String role = rs.getString("role");
-            user = new User(email, password, lastLogin, role);
+            user = new User(email, password);
         }
 
         return user;
+    }
+
+    public static void updateUserPoints(User user, int points) throws SQLException, NullPointerException {
+        Connection con = Database.GetConnection();
+        String queryString = "UPDATE profiles_person p SET points_balance = ? FROM auth_user u WHERE u.email = ? AND u.id = p.user_id;";
+        PreparedStatement ps = con.prepareStatement(queryString);
+        ps.setInt(1, points);
+        ps.setString(2, user.getEmail());
+        ps.executeUpdate();
     }
 
 }

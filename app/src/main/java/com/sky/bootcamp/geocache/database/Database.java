@@ -14,7 +14,7 @@ public class Database {
     /**
      * Connection string.
      */
-    private static String url = "jdbc:postgresql://192.168.1.9/bootcamp"; // DATABASE CONNECTION STRING
+    private static String url = "jdbc:postgresql://192.168.0.15/bootcamp"; // DATABASE CONNECTION STRING
     /**
      * Username for database
      */

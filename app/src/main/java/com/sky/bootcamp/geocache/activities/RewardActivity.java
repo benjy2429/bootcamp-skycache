@@ -1,11 +1,13 @@
 package com.sky.bootcamp.geocache.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +15,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sky.bootcamp.geocache.R;
+import com.sky.bootcamp.geocache.database.DatabaseAccessLayer;
+import com.sky.bootcamp.geocache.models.User;
 
+import java.sql.SQLException;
 import java.util.Random;
 
 public class RewardActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private User currentUser;
+    private UpdatePointsTask mUpdateTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +35,14 @@ public class RewardActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+        currentUser = (User) getIntent().getSerializableExtra("currentUser");
+
         TextView pointsView = (TextView) findViewById(R.id.points);
-        pointsView.setText(generateRandomPoints() + "00");
+        int points = generateRandomPoints() * 100;
+        pointsView.setText(points + "");
+
+        mUpdateTask = new UpdatePointsTask(currentUser, points);
+        mUpdateTask.execute((Void) null);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.back_to_map_button);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -63,5 +76,26 @@ public class RewardActivity extends AppCompatActivity {
     private int generateRandomPoints() {
         Random randomGenerator = new Random();
         return randomGenerator.nextInt((10 - 1) + 1) + 1;
+    }
+
+    public class UpdatePointsTask extends AsyncTask<Void, Void, Void> {
+
+        private final User mUser;
+        private final int mPoints;
+
+        UpdatePointsTask(User user, int points) {
+            mUser = user;
+            mPoints = points;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                DatabaseAccessLayer.updateUserPoints(mUser, mPoints);
+            } catch (SQLException | NullPointerException e) {
+                Log.e("Database Connection", e.getMessage());
+            }
+            return null;
+        }
     }
 }

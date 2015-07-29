@@ -277,13 +277,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return user;
                 }
 
-                // Check if the user has the correct role
-                if (!user.getRole().equals(User.VALID_ROLE)) {
-                    errMsg = "This account is not authorised to use this app.";
-                    return user;
-                }
-
-            } catch (SQLException | UnsupportedEncodingException e) {
+            } catch (SQLException | UnsupportedEncodingException | NullPointerException e) {
                 errMsg = "An error has occurred. Please try again later.";
                 Log.e("Database Connection", e.getMessage());
                 return user;
@@ -302,6 +296,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 errMsg = "";
             } else {
                 Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                intent.putExtra("currentUser", user);
                 startActivity(intent);
             }
         }
