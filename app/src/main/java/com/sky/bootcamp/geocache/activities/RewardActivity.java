@@ -93,7 +93,6 @@ public class RewardActivity extends AppCompatActivity {
             try {
                 DatabaseAccessLayer.updateUserPoints(mUser, mPoints);
             } catch (SQLException | NullPointerException e) {
-                Log.e("Database Connection", e.getMessage());
             }
             return null;
         }

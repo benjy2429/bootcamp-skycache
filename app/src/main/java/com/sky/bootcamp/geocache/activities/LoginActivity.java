@@ -279,7 +279,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             } catch (SQLException | UnsupportedEncodingException | NullPointerException e) {
                 errMsg = "An error has occurred. Please try again later.";
-                Log.e("Database Connection", e.getMessage());
                 return user;
             }
 
